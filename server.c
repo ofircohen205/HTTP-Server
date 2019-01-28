@@ -877,6 +877,8 @@ int server_error(int fd, request_t* request)
     if(request->write_buff == NULL)
     {
         printf("error on allocating memory\r\n");
+        free_struct(request);
+        close(fd);
         return FAILED;
     }
     bzero(request->write_buff, size);
@@ -889,11 +891,14 @@ int server_error(int fd, request_t* request)
     if(nbytes < 0)
     {
         perror("write");
+        free_struct(request);
+        close(fd);
         return FAILED;
     }
 
     free_struct(request);
     close(fd);
+    return SUCCESS;
 }
 
 
