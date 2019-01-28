@@ -116,9 +116,6 @@ int main(int argc, char* argv[])
         exit(FAILED);
     }
 
-    /* when pressing all the time of F5 in browser there is SIG PIPE so we will ignore it */
-    signal(SIGPIPE, SIG_IGN);
-
     int* fds = (int*)malloc(sizeof(int)*max_requests);
     if(fds == NULL)
     {
