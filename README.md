@@ -16,7 +16,7 @@ open linux terminal, navigate to the folder containing ex3
 using the "cd" command (confirm it by using ls command)
 incase you have makefile, type make and the program will
 automaticily be compiled, if you don't, type 
-gcc 
+gcc threadpool.h threadpool.c server.c -o server -g -Wall -lpthread
 
 and your program will automaticily be compiled
 
