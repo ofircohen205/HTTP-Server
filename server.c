@@ -151,7 +151,7 @@ int main(int argc, char* argv[])
 /* create socket descriptor where the server is listening to requests */
 int create_server(int port)
 {
-    int sockfd, fd;
+    int sockfd;
     struct sockaddr_in srv;
 
     if((sockfd = socket(PF_INET, SOCK_STREAM, 0)) < 0)

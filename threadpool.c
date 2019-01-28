@@ -99,8 +99,7 @@ threadpool* create_threadpool(int num_threads_in_pool)
     {
         if(pthread_create(&tp->threads[i], NULL, do_work, (void*)tp) != 0)
         {
-            free(tp->threads);
-            free(tp);
+            destroy_threadpool(tp);
             return NULL;
         }
     }
@@ -152,7 +151,6 @@ void dispatch(threadpool* from_me, dispatch_fn dispatch_to_here, void *arg)
     if(work == NULL)
     {
         pthread_mutex_unlock(&from_me->qlock);
-        //TODO: free memory
         return;
     }
 
@@ -238,13 +236,6 @@ void* do_work(void* p)
 
         tp->qsize--;
 
-        /* run the function that we took from the job list */
-        if(work)
-        {
-            work->routine(work->arg);
-            free(work);
-        }
-
         /* check if the job we took is the only job in the list */
         if(tp->qsize == 0)
         {
@@ -262,8 +253,14 @@ void* do_work(void* p)
         {
             tp->qhead = tp->qhead->next;
         }
-
         pthread_mutex_unlock(&tp->qlock);
+
+        /* run the function that we took from the job list */
+        if(work)
+        {
+            work->routine(work->arg);
+            free(work);
+        }
     }
 }
 
